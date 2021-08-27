@@ -20,7 +20,12 @@ server.on('request', (request: IncomingMessage, response: ServerResponse) => {
     const body = Buffer.concat(array).toString();
     console.log('body');
     console.log(body);
-    response.end('hi');
+
+    response.statusCode = 404;
+    response.setHeader('X-lemon', `I'm Lemon`);
+    response.setHeader('Content-Type', 'image/png');
+    response.write(ImageData);
+    response.end();
   });
 });
 
