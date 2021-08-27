@@ -10,33 +10,16 @@ const publicDir = p.resolve(__dirname, 'public');
 server.on('request', (request: IncomingMessage, response: ServerResponse) => {
   const {method, url: path, headers} = request;
   const {pathname, search} = url.parse(path);
-  switch (pathname) {
-    case '/index.html':
-      response.setHeader('Content-Type', 'text/html; charset=utf-8');
-      fs.readFile(p.resolve(publicDir, 'index.html'), (error, data) => {
-        if (error) throw error;
-        response.end(data.toString());
-      });
-      break;
-    case '/style.css':
-      response.setHeader('Content-Type', 'text/css; charset=utf-8');
-      fs.readFile(p.resolve(publicDir, 'style.css'), (error, data) => {
-        if (error) throw error;
-        response.end(data.toString());
-      });
-      break;
-    case '/main.js':
-      response.setHeader('Content-Type', 'text/javascript; charset=utf-8');
-      fs.readFile(p.resolve(publicDir, 'main.js'), (error, data) => {
-        if (error) throw error;
-        response.end(data.toString());
-      });
-      break;
-    default:
+  // response.setHeader('Content-Type', 'text/html; charset=utf-8');
+  const filename = pathname.substr(1);
+  fs.readFile(p.resolve(publicDir, filename), (error, data) => {
+    if (error) {
       response.statusCode = 404;
-      response.end();
-      break;
-  }
+      response.end('你要的文件不存在');
+    } else {
+      response.end(data.toString());
+    }
+  });
 });
 
 // 开始监听 8888 端口
