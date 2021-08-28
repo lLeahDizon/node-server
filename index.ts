@@ -10,6 +10,12 @@ const publicDir = p.resolve(__dirname, 'public');
 server.on('request', (request: IncomingMessage, response: ServerResponse) => {
   const {method, url: path, headers} = request;
   const {pathname, search} = url.parse(path);
+
+  if (method !== 'GET') {
+    response.statusCode = 405;
+    response.end('');
+  }
+
   // response.setHeader('Content-Type', 'text/html; charset=utf-8');
   let filename = pathname.substr(1);
   if (filename === '') {
